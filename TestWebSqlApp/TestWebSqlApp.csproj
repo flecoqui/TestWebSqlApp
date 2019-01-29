@@ -4,7 +4,6 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
    <RuntimeFrameworkVersion>2.1.0</RuntimeFrameworkVersion>
    <PlatformTarget>AnyCPU</PlatformTarget>
-   <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>
