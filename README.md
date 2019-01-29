@@ -18,7 +18,7 @@ This template allows you to deploy a .Net Core Application on Azure App Service 
 
 **Azure CLI:** azure group create "ResourceGroupName" "RegionName"
 
-**Azure CLI 2.0:** az group create �n "ResourceGroupName" -l "RegionName"
+**Azure CLI 2.0:** az group create an "ResourceGroupName" -l "RegionName"
 
 For instance:
 
