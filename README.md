@@ -7,9 +7,7 @@
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
-
-This template allows you to deploy an .Net Core Application on Azure App Service and using Azure SQL Service</p>
-For this deployment the source code of the .Net Core application is also avaiable on the same depot.
+This template allows you to deploy a .Net Core Application on Azure App Service and using Azure SQL Service.  For this deployment the source code of the .Net Core application will be stored on github and automatically deployed on Azure App Service.
 
 
 ![](https://raw.githubusercontent.com/flecoqui/TestWebSqlApp/master/Docs/1-architecture.png)
@@ -40,16 +38,16 @@ For instance:
 
 
 When you deploy the service you can define the following parameters:</p>
-**webSiteName:**                    The name of the web site (must be unique)
-**hostingPlanName:**                The name of the hosting Plan (must be unique)
-**skuName:**                        The Sku Name, by defualt "F1"
-**skuCapacity:**                    The Sku Capacity, by defualt 1
-**sqlServerName:**                  The SQL Server Name (must be unique)
-**databaseName:**                   The database Name (must be unique)
-**sqlAdministratorLogin:**          The SQL Administrator Login
-**sqlAdministratorLoginPassword:**  The SQL Administrator Password (Complexe password required)
-**repoURL:**                        The github repository url
-**branch:**                         The branch name in the repository
+**webSiteName:**                    The name of the web site (must be unique) </p>
+**hostingPlanName:**                The name of the hosting Plan (must be unique)</p>
+**skuName:**                        The Sku Name, by defualt "F1"</p>
+**skuCapacity:**                    The Sku Capacity, by defualt 1</p>
+**sqlServerName:**                  The SQL Server Name (must be unique)</p>
+**databaseName:**                   The database Name (must be unique)</p>
+**sqlAdministratorLogin:**          The SQL Administrator Login</p>
+**sqlAdministratorLoginPassword:**  The SQL Administrator Password (Complexe password required)</p>
+**repoURL:**                        The github repository url</p>
+**branch:**                         The branch name in the repository</p>
 
 ## TEST THE VM:
 Once the services are deployed, you can open the Web page hosted on the Azure App Service.
@@ -61,6 +59,7 @@ For instance :
 
 
 ## DELETE THE RESOURCE GROUP:
+
 **Azure CLI:** azure group delete "ResourceGroupName" "RegionName"
 
 **Azure CLI 2.0:** az group delete -n "ResourceGroupName" "RegionName"
@@ -68,5 +67,6 @@ For instance :
 For instance:
 
     azure group delete testwebsqlapprg eastus2
-	
+
     az group delete -n testwebsqlapprg 
+
