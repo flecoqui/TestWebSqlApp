@@ -39,42 +39,17 @@ For instance:
     az group deployment create -g testwebsqlapprg -n testwebsqlappdep --template-file azuredeploy.json --parameter @azuredeploy.parameters.json --verbose -o json
 
 
-Beyond login/password, the input parameters are :</p>
-configurationSize (Small: F1 and 128 GB data disk, Medium: F2 and 256 GB data disk, Large: F4 and 512 GB data disk, XLarge: F4 and 1024 GB data disk) : 
-
-    "configurationSize": {
-      "type": "string",
-      "defaultValue": "Small",
-      "allowedValues": [
-        "Small",
-        "Medium",
-        "Large",
-        "XLarge"
-      ],
-      "metadata": {
-        "description": "Configuration Size: VM Size + Disk Size"
-      }
-    }
-
-configurationOS (debian, ubuntu, centos, redhat, nano server 2016, windows server 2016): 
-
-    "configurationOS": {
-      "type": "string",
-      "defaultValue": "debian",
-      "allowedValues": [
-        "debian",
-        "ubuntu",
-        "centos",
-        "redhat",
-        "nanoserver2016",
-        "windowsserver2016"
-      ],
-      "metadata": {
-        "description": "The Operating System to be installed on the VM. Default value debian. Allowed values: debian,ubuntu,centos,redhat,nanoserver2016,windowsserver2016"
-      }
-    },
-
-
+When you deploy the service you can define the following parameters:</p>
+**webSiteName:**                    The name of the web site (must be unique)
+**hostingPlanName:**                The name of the hosting Plan (must be unique)
+**skuName:**                        The Sku Name, by defualt "F1"
+**skuCapacity:**                    The Sku Capacity, by defualt 1
+**sqlServerName:**                  The SQL Server Name (must be unique)
+**databaseName:**                   The database Name (must be unique)
+**sqlAdministratorLogin:**          The SQL Administrator Login
+**sqlAdministratorLoginPassword:**  The SQL Administrator Password (Complexe password required)
+**repoURL:**                        The github repository url
+**branch:**                         The branch name in the repository
 
 ## TEST THE VM:
 Once the services are deployed, you can open the Web page hosted on the Azure App Service.
