@@ -15,6 +15,7 @@ This template allows you to deploy a .Net Core Application on Azure App Service 
 
 
 ## CREATE RESOURCE GROUP:
+
 **Azure CLI:** azure group create "ResourceGroupName" "RegionName"
 
 **Azure CLI 2.0:** az group create �n "ResourceGroupName" -l "RegionName"
@@ -25,7 +26,8 @@ For instance:
 
     az group create -n testwebsqlapprg -l eastus2
 
-## DEPLOY THE VM:
+## DEPLOY THE SERVICES:
+
 **Azure CLI:** azure group deployment create "ResourceGroupName" "DeploymentName"  -f azuredeploy.json -e azuredeploy.parameters.json*
 
 **Azure CLI 2.0:** az group deployment create -g "ResourceGroupName" -n "DeploymentName" --template-file "templatefile.json" --parameters @"templatefile.parameter..json"  --verbose -o json
@@ -49,7 +51,7 @@ When you deploy the service you can define the following parameters:</p>
 **repoURL:**                        The github repository url</p>
 **branch:**                         The branch name in the repository</p>
 
-## TEST THE VM:
+## TEST THE SERVICES:
 Once the services are deployed, you can open the Web page hosted on the Azure App Service.
 For instance :
 
