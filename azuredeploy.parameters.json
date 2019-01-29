@@ -1,21 +1,36 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "adminUsername": {
-      "value": "VMAdmin"
+    "webSiteName": {
+      "value": "testwebsqlapp"
     },
-    "adminPassword": {
-      "value": "VMP@ssw0rd"
+    "hostingPlanName": {
+      "value": "testwebsqlappplan"
     },
-    "dnsLabelPrefix": {
-      "value": "vmuniver001"
+    "skuName": {
+      "value": "F1"
     },
-    "configurationOS": {
-      "value": "centos"
+    "skuCapacity": {
+      "value": 1
     },
-    "configurationSize": {
-      "value": "Small"
-    }
+    "sqlServerName": {
+      "value": "testwebsqlserver"
+    },
+    "databaseName": {
+      "value": "sampledb"
+    },
+    "sqlAdministratorLogin": {
+      "value": "sqladmin"
+    },
+    "sqlAdministratorLoginPassword": {		
+      "value": "sqlpassword"		
+    },		
+    "repoURL": {
+      "value": "https://github.com/flecoqui/TestWebSqlApp.git"
+    },
+    "branch": {
+      "value": "master"
+    } 
   }
 }
