@@ -1,38 +1,31 @@
-# Deployment of a VM (Linux or Windows) running Apache or IIS (port 80) 
+# Deployment of an .Net Core Application running on Azure App Service and using Azure SQL Service 
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fflecoqui%2FARMStepByStep%2Fmaster%2FStep_3_SingleVMUniversalTemplate%2F101-vm-simple-universal%2Fazuredeploy.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fflecoqui%2FTestWebSqlApp%2Fmaster%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
-<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Fflecoqui%2FARMStepByStep%2Fmaster%2FStep_3_SingleVMUniversalTemplate%2F101-vm-simple-universal%2Fazuredeploy.json" target="_blank">
+<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Fflecoqui%2FTestWebSqlApp%2Fmaster%2Fazuredeploy.json" target="_blank">
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
 
-This template allows you to deploy a simple VM running: </p>
-#### Debian: Apache ,
-#### Ubuntu: Apache, 
-#### Centos: Apache, 
-#### Red Hat: Apache,
-#### Windows Server 2016: IIS,
-#### Nano Server 2016: IIS
-This will deploy in the region associated with Resource Group and the VM Size is one of the parameter.
-With Azure CLI you can deploy this VM with 2 command lines:
+This template allows you to deploy an .Net Core Application on Azure App Service and using Azure SQL Service</p>
+For this deployment the source code of the .Net Core application is also avaiable on the same depot.
 
 
-![](https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_3_SingleVMUniversalTemplate/101-vm-simple-universal/Docs/1-architecture.png)
+![](https://raw.githubusercontent.com/flecoqui/TestWebSqlApp/master/Docs/1-architecture.png)
 
 
 
 ## CREATE RESOURCE GROUP:
 **Azure CLI:** azure group create "ResourceGroupName" "RegionName"
 
-**Azure CLI 2.0:** az group create –n "ResourceGroupName" -l "RegionName"
+**Azure CLI 2.0:** az group create ï¿½n "ResourceGroupName" -l "RegionName"
 
 For instance:
 
-    azure group create simplevmrg eastus2
+    azure group create testwebsqlappg eastus2
 
-    az group create -n simplevmrg -l eastus2
+    az group create -n testwebsqlapprg -l eastus2
 
 ## DEPLOY THE VM:
 **Azure CLI:** azure group deployment create "ResourceGroupName" "DeploymentName"  -f azuredeploy.json -e azuredeploy.parameters.json*
@@ -41,9 +34,9 @@ For instance:
 
 For instance:
 
-    azure group deployment create simplevmrg simplevmtest -f azuredeploy.json -e azuredeploy.parameters.json -vv
+    azure group deployment create testwebsqlapprg testwebsqlappdep -f azuredeploy.json -e azuredeploy.parameters.json -vv
 
-    az group deployment create -g simplevmrg -n simplevmtest --template-file azuredeploy.json --parameter @azuredeploy.parameters.json --verbose -o json
+    az group deployment create -g testwebsqlapprg -n testwebsqlappdep --template-file azuredeploy.json --parameter @azuredeploy.parameters.json --verbose -o json
 
 
 Beyond login/password, the input parameters are :</p>
@@ -84,31 +77,12 @@ configurationOS (debian, ubuntu, centos, redhat, nano server 2016, windows serve
 
 
 ## TEST THE VM:
-Once the VM has been deployed, you can open the Web page hosted on the VM.
-For instance for Linux VM:
+Once the services are deployed, you can open the Web page hosted on the Azure App Service.
+For instance :
 
-     http://vmubus001.eastus2.cloudapp.azure.com/index.php 
-
-for Windows VM:
-
-     http://vmnanos001.eastus2.cloudapp.azure.com/index.html 
-
+     http://<websitename>.azurewebsites.net/
+ 
 </p>
-
-Finally, you can open a remote session with the VM.
-
-For instance for Linux VM:
-
-     ssh VMAdmin@vmubus001.eastus2.cloudapp.azure.com
-
-For Windows Server VM:
-
-     mstsc /admin /v:vmwins001.eastus2.cloudapp.azure.com
-
-For Nano Server VM:
-
-     Set-Item WSMan:\\localhost\\Client\\TrustedHosts vmnanos001.eastus2.cloudapp.azure.com </p>
-     Enter-PSSession -ComputerName vmnanos001.eastus2.cloudapp.azure.com </p>
 
 
 ## DELETE THE RESOURCE GROUP:
@@ -118,6 +92,6 @@ For Nano Server VM:
 
 For instance:
 
-    azure group delete simplevmrg eastus2
+    azure group delete testwebsqlapprg eastus2
 	
-    az group delete -n simplevmrg 
+    az group delete -n testwebsqlapprg 
