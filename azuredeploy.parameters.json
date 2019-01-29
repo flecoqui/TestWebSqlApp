@@ -24,7 +24,7 @@
       "value": "sqladmin"
     },
     "sqlAdministratorLoginPassword": {		
-      "value": "sqlpassword"		
+      "value": "sqlP@ssw0rd"		
     },		
     "repoURL": {
       "value": "https://github.com/flecoqui/TestWebSqlApp.git"
