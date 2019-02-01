@@ -335,7 +335,7 @@
         "accessTier": "Cool"
     },
     "dependsOn": [
-      "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
+      "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
     ]
 },
     {
