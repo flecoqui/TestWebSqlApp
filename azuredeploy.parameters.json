@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "webSiteName": {
-      "value": "testwebsqlapp"
+      "value": "bsqltestweapp"
     },
     "hostingPlanName": {
       "value": "testwebsqlappplan"
@@ -15,7 +15,7 @@
       "value": 1
     },
     "sqlServerName": {
-      "value": "testwebsqlserver"
+      "value": "testwebsqlsqlname"
     },
     "databaseName": {
       "value": "sampledb"
@@ -25,7 +25,19 @@
     },
     "sqlAdministratorLoginPassword": {		
       "value": "sqlP@ssw0rd"		
-    },		
+    },	
+    "nsgName": {
+      "value": "testwebsqlnsg"		
+    },
+    "virtualNetworkName": {
+      "value": "testwebsqlvnet"		
+    },
+    "subnetName": {
+      "value": "testwebsqlsubnet"		
+    },
+    "storageAccountName": {
+      "value": "testwebsqlstorage"		
+    },
     "repoURL": {
       "value": "https://github.com/flecoqui/TestWebSqlApp.git"
     },

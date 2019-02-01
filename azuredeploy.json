@@ -71,6 +71,30 @@
         "description": "The password of the admin user of the SQL Server"
       }
     },
+    "nsgName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Network Security Group"
+      }
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Virtual Network "
+      }
+    },
+    "subnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the subnet connected to Azure App Service"
+      }
+    },
+    "storageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Storage Account connected to subnet"
+      }
+    },
     "repoURL": {
       "type": "string",
       "defaultValue": "https://github.com/flecoqui/TestWebSqlApp.git",
@@ -96,6 +120,224 @@
   "variables": {
   },
   "resources": [
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[parameters('nsgName')]",
+      "apiVersion": "2018-10-01",
+      "location": "[parameters('location')]",
+      "scale": null,
+      "properties": {
+          "securityRules": [],
+          "defaultSecurityRules": [
+              {
+                  "name": "AllowVnetInBound",
+                  "properties": {
+                      "description": "Allow inbound traffic from all VMs in VNET",
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
+                      "access": "Allow",
+                      "priority": 65000,
+                      "direction": "Inbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                  }
+              },
+              {
+                  "name": "AllowAzureLoadBalancerInBound",
+                  "properties": {
+                      "description": "Allow inbound traffic from azure load balancer",
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "*",
+                      "sourceAddressPrefix": "AzureLoadBalancer",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 65001,
+                      "direction": "Inbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                  }
+              },
+              {
+                  "name": "DenyAllInBound",
+                  "properties": {
+                      "description": "Deny all inbound traffic",
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "*",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "*",
+                      "access": "Deny",
+                      "priority": 65500,
+                      "direction": "Inbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                  }
+              },
+              {
+                  "name": "AllowVnetOutBound",
+                  "properties": {
+                      "description": "Allow outbound traffic from all VMs to all VMs in VNET",
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
+                      "access": "Allow",
+                      "priority": 65000,
+                      "direction": "Outbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                  }
+              },
+              {
+                  "name": "AllowInternetOutBound",
+                  "properties": {
+                      "description": "Allow outbound traffic from all VMs to Internet",
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "*",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "Internet",
+                      "access": "Allow",
+                      "priority": 65001,
+                      "direction": "Outbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                  }
+              },
+              {
+                  "name": "DenyAllOutBound",
+                  "properties": {
+                      "description": "Deny all outbound traffic",
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "*",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "*",
+                      "access": "Deny",
+                      "priority": 65500,
+                      "direction": "Outbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                  }
+              }
+          ]
+      },
+      "dependsOn": []
+  },
+  {
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "[parameters('virtualNetworkName')]",
+      "apiVersion": "2018-10-01",
+      "location": "[parameters('location')]",
+      "scale": null,
+      "properties": {
+          "addressSpace": {
+              "addressPrefixes": [
+                  "10.0.0.0/16"
+              ]
+          },
+          "subnets": [
+              {
+                  "name": "websubnet",
+                  "properties": {
+                      "addressPrefix": "10.0.1.0/24",
+                      "networkSecurityGroup": {
+                          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
+                      },
+                      "serviceEndpoints": [
+                          {
+                              "service": "Microsoft.Sql",
+                              "locations": [
+                                "[parameters('location')]"
+                              ]
+                          },
+                          {
+                              "service": "Microsoft.Storage",
+                              "locations": [
+                                "[parameters('location')]"
+                              ]
+                          }
+                      ],
+                      "delegations": [
+                          {
+                              "properties": {
+                                  "serviceName": "Microsoft.Web/serverfarms",
+                                  "actions": [
+                                      "Microsoft.Network/virtualNetworks/subnets/action"
+                                  ]
+                              }
+                          }
+                      ]
+                  }
+              }
+          ],
+          "virtualNetworkPeerings": [],
+          "enableDdosProtection": false,
+          "enableVmProtection": false
+      },
+      "dependsOn": [
+          "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
+      ]
+  },
+  {
+    "type": "Microsoft.Storage/storageAccounts",
+    "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+    },
+    "kind": "StorageV2",
+    "name": "[parameters('storageAccountName')]",
+    "apiVersion": "2018-07-01",
+    "location": "[parameters('location')]",
+    "tags": {},
+    "scale": null,
+    "properties": {
+        "networkAcls": {
+            "bypass": "AzureServices",
+            "virtualNetworkRules": [
+                {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
+                    "action": "Allow"
+                }
+            ],
+            "ipRules": [],
+            "defaultAction": "Deny"
+        },
+        "supportsHttpsTrafficOnly": true,
+        "encryption": {
+            "services": {
+                "file": {
+                    "enabled": true
+                },
+                "blob": {
+                    "enabled": true
+                }
+            },
+            "keySource": "Microsoft.Storage"
+        },
+        "accessTier": "Cool"
+    },
+    "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]"
+    ]
+},
     {
       "name": "[parameters('sqlServerName')]",
       "type": "Microsoft.Sql/servers",
@@ -143,6 +385,20 @@
         }
       ]
     },
+    {
+      "type": "Microsoft.Sql/servers/virtualNetworkRules",
+      "name": "[concat(parameters('sqlServerName'), '/vnetsqlrule')]",
+      "apiVersion": "2015-05-01-preview",
+      "scale": null,
+      "properties": {
+          "virtualNetworkSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
+          "ignoreMissingVnetServiceEndpoint": false
+      },
+      "dependsOn": [
+          "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]",
+          "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]"
+      ]
+  },
     {
       "apiVersion": "2016-03-01",
       "name": "[parameters('hostingPlanName')]",
@@ -205,7 +461,27 @@
         }
       ]
     },
-
+    ,
+    {
+        "type": "Microsoft.Web/sites/virtualNetworkConnections",
+        "name": "[concat(parameters('webSiteName'), '/webvnetconnection')]",
+        "apiVersion": "2016-08-01",
+        "location": "East US 2",
+        "scale": null,
+        "properties": {
+            "vnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
+            "certThumbprint": null,
+            "certBlob": null,
+            "routes": null,
+            "resyncRequired": false,
+            "dnsServers": null,
+            "isSwift": true
+        },
+        "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]",
+            "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]"
+        ]
+    },
     {
       "apiVersion": "2015-04-01",
       "name": "[concat('ServerErrors ', parameters('webSiteName'))]",
