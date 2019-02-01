@@ -297,6 +297,49 @@
       ]
   },
   {
+    "type": "Microsoft.Network/virtualNetworks/subnet",
+    "name": "[concat(parameters('virtualNetworkName'), '/', parameters('subnetName'))]",
+    "apiVersion": "2018-10-01",
+    "scale": null,
+    "properties": {
+        "provisioningState": "Succeeded",
+        "addressPrefix": "10.0.1.0/24",
+        "networkSecurityGroup": {
+            "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
+        },
+        "serviceEndpoints": [
+            {
+                "provisioningState": "Succeeded",
+                "service": "Microsoft.Sql",
+                "locations": [
+                  "[parameters('location')]"
+                ]
+            },
+            {
+                "provisioningState": "Succeeded",
+                "service": "Microsoft.Storage",
+                "locations": [
+                  "[parameters('location')]"
+                ]
+            }
+        ],
+        "delegations": [
+            {
+                "properties": {
+                    "serviceName": "Microsoft.Web/serverfarms",
+                    "actions": [
+                        "Microsoft.Network/virtualNetworks/subnets/action"
+                    ]
+                }
+            }
+        ]
+    },
+    "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
+    ]
+},
+  {
     "type": "Microsoft.Storage/storageAccounts",
     "sku": {
         "name": "Standard_LRS",
