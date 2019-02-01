@@ -255,37 +255,39 @@
           },
           "subnets": [
               {
-                  "name":"[parameters('subnetName')]",
+                  "name": "[parameters('subnetName')]",
                   "properties": {
                       "addressPrefix": "10.0.1.0/24",
                       "networkSecurityGroup": {
                           "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
-                      },
-                      "serviceEndpoints": [
-                          {
-                              "service": "Microsoft.Sql",
-                              "locations": [
-                                "[parameters('location')]"
-                              ]
-                          },
-                          {
-                              "service": "Microsoft.Storage",
-                              "locations": [
-                                "[parameters('location')]"
-                              ]
-                          }
-                      ],
-                      "delegations": [
-                          {
-                              "properties": {
-                                  "serviceName": "Microsoft.Web/serverfarms",
-                                  "actions": [
-                                      "Microsoft.Network/virtualNetworks/subnets/action"
-                                  ]
-                              }
-                          }
-                      ]
-                  }
+                      }
+                  },
+                  "serviceEndpoints": [
+                    {
+
+                        "service": "Microsoft.Sql",
+                        "locations": [
+                            "eastus2"
+                        ]
+                    },
+                    {
+
+                        "service": "Microsoft.Storage",
+                        "locations": [
+                            "eastus2"
+                        ]
+                    }
+                ],
+                "delegations": [
+                    {
+                        "properties": {
+                            "serviceName": "Microsoft.Web/serverFarms",
+                            "actions": [
+                                "Microsoft.Network/virtualNetworks/subnets/action"
+                            ]
+                        }
+                    }
+                ]
               }
           ],
           "virtualNetworkPeerings": [],
@@ -296,49 +298,7 @@
           "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
       ]
   },
-  {
-    "type": "Microsoft.Network/virtualNetworks/subnet",
-    "name": "[concat(parameters('virtualNetworkName'), '/', parameters('subnetName'))]",
-    "apiVersion": "2018-10-01",
-    "scale": null,
-    "properties": {
-        "provisioningState": "Succeeded",
-        "addressPrefix": "10.0.1.0/24",
-        "networkSecurityGroup": {
-            "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
-        },
-        "serviceEndpoints": [
-            {
-                "provisioningState": "Succeeded",
-                "service": "Microsoft.Sql",
-                "locations": [
-                  "[parameters('location')]"
-                ]
-            },
-            {
-                "provisioningState": "Succeeded",
-                "service": "Microsoft.Storage",
-                "locations": [
-                  "[parameters('location')]"
-                ]
-            }
-        ],
-        "delegations": [
-            {
-                "properties": {
-                    "serviceName": "Microsoft.Web/serverfarms",
-                    "actions": [
-                        "Microsoft.Network/virtualNetworks/subnets/action"
-                    ]
-                }
-            }
-        ]
-    },
-    "dependsOn": [
-        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-        "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
-    ]
-},
+  
   {
     "type": "Microsoft.Storage/storageAccounts",
     "sku": {
@@ -352,17 +312,6 @@
     "tags": {},
     "scale": null,
     "properties": {
-        "networkAcls": {
-            "bypass": "AzureServices",
-            "virtualNetworkRules": [
-                {
-                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
-                    "action": "Allow"
-                }
-            ],
-            "ipRules": [],
-            "defaultAction": "Deny"
-        },
         "supportsHttpsTrafficOnly": true,
         "encryption": {
             "services": {
@@ -429,20 +378,6 @@
       ]
     },
     {
-      "type": "Microsoft.Sql/servers/virtualNetworkRules",
-      "name": "[concat(parameters('sqlServerName'), '/vnetsqlrule')]",
-      "apiVersion": "2015-05-01-preview",
-      "scale": null,
-      "properties": {
-          "virtualNetworkSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
-          "ignoreMissingVnetServiceEndpoint": false
-      },
-      "dependsOn": [
-          "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]",
-          "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]"
-      ]
-  },
-    {
       "apiVersion": "2016-03-01",
       "name": "[parameters('hostingPlanName')]",
       "type": "Microsoft.Web/serverfarms",
@@ -505,26 +440,7 @@
       ]
     },
     
-    {
-        "type": "Microsoft.Web/sites/virtualNetworkConnections",
-        "name": "[concat(parameters('webSiteName'), '/webvnetconnection')]",
-        "apiVersion": "2016-08-01",
-        "location": "East US 2",
-        "scale": null,
-        "properties": {
-            "vnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
-            "certThumbprint": null,
-            "certBlob": null,
-            "routes": null,
-            "resyncRequired": false,
-            "dnsServers": null,
-            "isSwift": true
-        },
-        "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]",
-            "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]"
-        ]
-    },
+
     {
       "apiVersion": "2015-04-01",
       "name": "[concat('ServerErrors ', parameters('webSiteName'))]",
