@@ -22,7 +22,7 @@ This template allows you to deploy a .Net Core Application on Azure App Service 
 
 For instance:
 
-    azure group create testwebsqlappg eastus2
+    azure group create testwebsqlapprg eastus2
 
     az group create -n testwebsqlapprg -l eastus2
 

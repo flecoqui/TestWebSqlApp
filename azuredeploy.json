@@ -461,7 +461,7 @@
         }
       ]
     },
-    ,
+    
     {
         "type": "Microsoft.Web/sites/virtualNetworkConnections",
         "name": "[concat(parameters('webSiteName'), '/webvnetconnection')]",
