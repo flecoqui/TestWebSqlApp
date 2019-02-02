@@ -315,7 +315,7 @@
           "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]",
           "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]"
       ]
-  }
+  },
   {
     "type": "Microsoft.Storage/storageAccounts",
     "sku": {
