@@ -295,7 +295,27 @@
           "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
       ]
   },
-
+  
+  {
+      "type": "Microsoft.Web/sites/virtualNetworkConnections",
+      "name": "[concat(parameters('webSiteName'), '/', 'virtualNetworkConnection')]",
+      "apiVersion": "2016-08-01",
+      "location": "[parameters('location')]",
+      "scale": null,
+      "properties": {
+          "vnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
+          "certThumbprint": null,
+          "certBlob": null,
+          "routes": null,
+          "resyncRequired": false,
+          "dnsServers": null,
+          "isSwift": true
+      },
+      "dependsOn": [
+          "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]",
+          "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]"
+      ]
+  }
   {
     "type": "Microsoft.Storage/storageAccounts",
     "sku": {
