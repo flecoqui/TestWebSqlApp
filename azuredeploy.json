@@ -18,7 +18,7 @@
     },
     "skuName": {
       "type": "string",
-      "defaultValue": "F1",
+      "defaultValue": "S1",
       "allowedValues": [
         "F1",
         "D1",
@@ -34,7 +34,7 @@
         "P4"
       ],
       "metadata": {
-        "description": "Describes plan's pricing tier and instance size. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
+        "description": "Use S1 Sku minimum to get the connection with the VNET. Describes plan's pricing tier and instance size. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
       }
     },
     "skuCapacity": {
@@ -467,11 +467,12 @@
           }
         },
         {
-          "apiVersion": "2015-08-01",
+          "apiVersion": "2016-08-01",
           "name": "web",
           "type": "sourcecontrols",
           "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', parameters('webSiteName'))]"
+            "[resourceId('Microsoft.Web/Sites', parameters('webSiteName'))]",
+            "[concat('Microsoft.Web/Sites/', parameters('webSiteName'), '/config/connectionstrings')]"
           ],
           "properties": {
             "RepoUrl": "[parameters('repoURL')]",
