@@ -42,12 +42,16 @@ For instance:
 When you deploy the service you can define the following parameters:</p>
 **webSiteName:**                    The name of the web site (must be unique) </p>
 **hostingPlanName:**                The name of the hosting Plan (must be unique)</p>
-**skuName:**                        The Sku Name, by defualt "F1"</p>
+**skuName:**                        The Sku Name, by default "S1". Use S1 to get the connection between the App Service and the VNET</p>
 **skuCapacity:**                    The Sku Capacity, by defualt 1</p>
 **sqlServerName:**                  The SQL Server Name (must be unique)</p>
 **databaseName:**                   The database Name (must be unique)</p>
 **sqlAdministratorLogin:**          The SQL Administrator Login</p>
 **sqlAdministratorLoginPassword:**  The SQL Administrator Password (Complexe password required)</p>
+**nsgName:**                        The Network Security Group Name</p>
+**virtualNetworkName:**             The Virtual Network Name</p>
+**subnetName:**                     The Subnet Name</p>
+**storageAccountName:**             The Stoarage Account Name</p>
 **repoURL:**                        The github repository url</p>
 **branch:**                         The branch name in the repository</p>
 
