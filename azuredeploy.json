@@ -244,9 +244,9 @@
   {
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[parameters('virtualNetworkName')]",
-      "apiVersion": "2018-10-01",
+      "apiVersion": "2018-07-01",
       "location": "[parameters('location')]",
-      "scale": null,
+
       "properties": {
           "addressSpace": {
               "addressPrefixes": [
@@ -260,45 +260,33 @@
                       "addressPrefix": "10.0.1.0/24",
                       "networkSecurityGroup": {
                           "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
-                      }
-                  },
-                  "serviceEndpoints": [
-                    {
-
-                        "service": "Microsoft.Sql",
-                        "locations": [
-                            "eastus2"
-                        ]
-                    },
-                    {
-
-                        "service": "Microsoft.Storage",
-                        "locations": [
-                            "eastus2"
-                        ]
-                    }
-                ],
-                "delegations": [
-                    {
-                        "properties": {
-                            "serviceName": "Microsoft.Web/serverFarms",
-                            "actions": [
-                                "Microsoft.Network/virtualNetworks/subnets/action"
-                            ]
+                      },
+                  
+                      "serviceEndpoints": [
+                        {
+                            "service": "Microsoft.Sql"
+                        },
+                        {
+                            "service": "Microsoft.Storage"
                         }
-                    }
-                ]
+                    ],
+                    "delegations": [
+                        {
+                            "name" : "DelegationService",
+                            "properties": {
+                                "serviceName": "Microsoft.Web/serverFarms"
+                            }
+                        }
+                    ]
+                 }
               }
-          ],
-          "virtualNetworkPeerings": [],
-          "enableDdosProtection": false,
-          "enableVmProtection": false
+          ]
       },
       "dependsOn": [
           "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
       ]
   },
-  
+
   {
     "type": "Microsoft.Storage/storageAccounts",
     "sku": {
@@ -309,9 +297,18 @@
     "name": "[parameters('storageAccountName')]",
     "apiVersion": "2018-07-01",
     "location": "[parameters('location')]",
-    "tags": {},
-    "scale": null,
     "properties": {
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [
+            {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
+                "action": "Allow"
+            }
+          ],
+          "ipRules": [],
+          "defaultAction": "Deny"
+        },
         "supportsHttpsTrafficOnly": true,
         "encryption": {
             "services": {
@@ -327,7 +324,7 @@
         "accessTier": "Cool"
     },
     "dependsOn": [
-      "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
+      "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
     ]
 },
     {
@@ -374,7 +371,22 @@
             "endIpAddress": "0.0.0.0",
             "startIpAddress": "0.0.0.0"
           }
-        }
+        },        
+        {
+          "name": "sqlvnetrule",
+          "type": "virtualNetworkRules",
+          "apiVersion": "2015-05-01-preview",
+          "properties": {
+              "virtualNetworkSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
+              "ignoreMissingVnetServiceEndpoint": true
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+          ]
+      }
+      ],
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
       ]
     },
     {
@@ -399,7 +411,8 @@
       "type": "Microsoft.Web/sites",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[parameters('hostingPlanName')]"
+        "[parameters('hostingPlanName')]",
+          "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
       ],
       "tags": {
         "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName')))]": "empty",
