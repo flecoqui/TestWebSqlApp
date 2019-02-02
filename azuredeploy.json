@@ -261,7 +261,15 @@
                       "networkSecurityGroup": {
                           "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
                       },
-                  
+                      "serviceAssociationLinks": [
+                        {
+                            "name": "AppServiceLink",
+                            "properties": {
+                                "linkedResourceType": "Microsoft.Web/serverfarms",
+                                "link": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
+                            }
+                        }
+                    ],
                       "serviceEndpoints": [
                         {
                             "service": "Microsoft.Sql"
@@ -283,7 +291,8 @@
           ]
       },
       "dependsOn": [
-          "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
+          "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]",
+          "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
       ]
   },
 
