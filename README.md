@@ -1,4 +1,4 @@
-# Deployment of an .Net Core Application running on Azure App Service and using Azure SQL Service 
+# Deployment of an ASP.Net Application running on Azure App Service using Azure SQL Service through a VNET with CICD from a github repository  
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fflecoqui%2FTestWebSqlApp%2Fmaster%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
@@ -7,7 +7,7 @@
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
-This template allows you to deploy a .Net Core Application on Azure App Service and using Azure SQL Service.  For this deployment the source code of the .Net Core application will be stored on github and automatically deployed on Azure App Service.
+This template allows you to deploy an ASP.Net Application on Azure App Service using Azure SQL Service. Moreover, this sample supports a VNET integration between the Web App, a SQL service and a Storage Account. For this deployment the source code of the ASP.Net  application will be stored on github and automatically deployed on Azure App Service.
 
 
 ![](https://raw.githubusercontent.com/flecoqui/TestWebSqlApp/master/Docs/1-architecture.png)
